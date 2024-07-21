@@ -6,7 +6,7 @@ Weight: Regular
 Copyright: Copyright (c) 2024, Matt Troutman
 UComments: "2024-7-12: Created with FontForge (http://fontforge.org)+AAoA-Based on Clique Alphabet by Grace J.S.+AAoACgAA-for all twenty +APgA-ne pil+APgA-ts fans"
 FontLog: "Currently maintained by Matt Troutman https://github.com/trtmn+AAoA"
-Version: 001.000
+Version: 1.01
 FONDName: Clique
 ItalicAngle: 0
 UnderlinePosition: -130
@@ -15,7 +15,7 @@ Ascent: 1100
 Descent: 200
 InvalidEm: 0
 woffMajor: 1
-woffMinor: 0
+woffMinor: 1
 LayerCount: 2
 Layer: 0 0 "Back" 1
 Layer: 1 0 "Fore" 0
@@ -26,7 +26,7 @@ OS2Version: 0
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 1
 CreationTime: 1720819814
-ModificationTime: 1721543966
+ModificationTime: 1721547490
 PfmFamily: 17
 TTFWeight: 400
 TTFWidth: 5
