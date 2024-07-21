@@ -15,7 +15,7 @@ jobs:
       - name: Extract Version
         id: extract_version
         run: |
-          VERSION=$(grep 'Version:' clique.sfd | awk '{print $2}')
+          VERSION=$(grep 'Version:' clique.sfd | awk '{print $2}' | sed 's/^0*//')
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Package Generated Fonts
