@@ -9,6 +9,51 @@ on:
       - main
 
 jobs:
+  check_conditions:
+    runs-on: ubuntu-latest
+    outputs:
+      version_changed: ${{ steps.version_change.outputs.changed }}
+      fonts_changed: ${{ steps.fonts_change.outputs.changed }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Check Version Change
+        id: version_change
+        run: |
+          VERSION=$(grep 'Version:' clique.sfd | awk '{print $2}' | sed 's/^0*//')
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          PREVIOUS_VERSION=$(cat .github/workflows/previous_version.txt || echo "0")
+          if [ "$VERSION" != "$PREVIOUS_VERSION" ]; then
+            echo "changed=true" >> $GITHUB_ENV
+            echo $VERSION > .github/workflows/previous_version.txt
+            git config --global user.email "action@github.com"
+            git config --global user.name "GitHub Action"
+            git add .github/workflows/previous_version.txt
+            git commit -m "Update version to $VERSION"
+            git push
+            echo "::set-output name=changed::true"
+          else
+            echo "::set-output name=changed::false"
+          fi
+
+      - name: Check Fonts Change
+        id: fonts_change
+        run: |
+          FONTS_HASH=$(find ./generated\ fonts/ -type f -exec md5sum {} \; | md5sum)
+          PREVIOUS_FONTS_HASH=$(cat .github/workflows/previous_fonts_hash.txt || echo "0")
+          if [ "$FONTS_HASH" != "$PREVIOUS_FONTS_HASH" ]; then
+            echo "changed=true" >> $GITHUB_ENV
+            echo $FONTS_HASH > .github/workflows/previous_fonts_hash.txt
+            git config --global user.email "action@github.com"
+            git config --global user.name "GitHub Action"
+            git add .github/workflows/previous_fonts_hash.txt
+            git commit -m "Update fonts hash"
+            git push
+            echo "::set-output name=changed::true"
+          else
+            echo "::set-output name=changed::false"
+          fi
   release:
     runs-on: ubuntu-latest
     steps:
@@ -31,7 +76,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.VERSION }}-${{github.run_id}}
+          tag_name: ${{ env.VERSION }}
           release_name: Release ${{ env.VERSION }}
           draft: false
           prerelease: false
